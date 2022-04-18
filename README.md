@@ -11,7 +11,7 @@ PSR-3 compliant test logger based on psr/log v1's
 
 ## 📦 Installation
 
-This project requires PHP 7.4 or higher.  To install it via [Composer] simply run:
+This project requires PHP 7.4 or higher.  To install it via Composer simply run:
 
 ``` bash
 $ composer require colinodell/psr-testlogger
