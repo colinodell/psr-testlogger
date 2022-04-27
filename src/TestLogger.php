@@ -12,14 +12,14 @@ use Psr\Log\LogLevel;
  *
  * It records all records and gives you access to them for verification.
  *
- * @method bool hasEmergency($record)
- * @method bool hasAlert($record)
- * @method bool hasCritical($record)
- * @method bool hasError($record)
- * @method bool hasWarning($record)
- * @method bool hasNotice($record)
- * @method bool hasInfo($record)
- * @method bool hasDebug($record)
+ * @method bool hasEmergency(string|array $record)
+ * @method bool hasAlert(string|array $record)
+ * @method bool hasCritical(string|array $record)
+ * @method bool hasError(string|array $record)
+ * @method bool hasWarning(string|array $record)
+ * @method bool hasNotice(string|array $record)
+ * @method bool hasInfo(string|array $record)
+ * @method bool hasDebug(string|array $record)
  * @method bool hasEmergencyRecords()
  * @method bool hasAlertRecords()
  * @method bool hasCriticalRecords()
@@ -28,30 +28,30 @@ use Psr\Log\LogLevel;
  * @method bool hasNoticeRecords()
  * @method bool hasInfoRecords()
  * @method bool hasDebugRecords()
- * @method bool hasEmergencyThatContains($message)
- * @method bool hasAlertThatContains($message)
- * @method bool hasCriticalThatContains($message)
- * @method bool hasErrorThatContains($message)
- * @method bool hasWarningThatContains($message)
- * @method bool hasNoticeThatContains($message)
- * @method bool hasInfoThatContains($message)
- * @method bool hasDebugThatContains($message)
- * @method bool hasEmergencyThatMatches($message)
- * @method bool hasAlertThatMatches($message)
- * @method bool hasCriticalThatMatches($message)
- * @method bool hasErrorThatMatches($message)
- * @method bool hasWarningThatMatches($message)
- * @method bool hasNoticeThatMatches($message)
- * @method bool hasInfoThatMatches($message)
- * @method bool hasDebugThatMatches($message)
- * @method bool hasEmergencyThatPasses($message)
- * @method bool hasAlertThatPasses($message)
- * @method bool hasCriticalThatPasses($message)
- * @method bool hasErrorThatPasses($message)
- * @method bool hasWarningThatPasses($message)
- * @method bool hasNoticeThatPasses($message)
- * @method bool hasInfoThatPasses($message)
- * @method bool hasDebugThatPasses($message)
+ * @method bool hasEmergencyThatContains(string $message)
+ * @method bool hasAlertThatContains(string $message)
+ * @method bool hasCriticalThatContains(string $message)
+ * @method bool hasErrorThatContains(string $message)
+ * @method bool hasWarningThatContains(string $message)
+ * @method bool hasNoticeThatContains(string $message)
+ * @method bool hasInfoThatContains(string $message)
+ * @method bool hasDebugThatContains(string $message)
+ * @method bool hasEmergencyThatMatches(string $regex)
+ * @method bool hasAlertThatMatches(string $regex)
+ * @method bool hasCriticalThatMatches(string $regex)
+ * @method bool hasErrorThatMatches(string $regex)
+ * @method bool hasWarningThatMatches(string $regex)
+ * @method bool hasNoticeThatMatches(string $regex)
+ * @method bool hasInfoThatMatches(string $regex)
+ * @method bool hasDebugThatMatches(string $regex)
+ * @method bool hasEmergencyThatPasses(callable $predicate)
+ * @method bool hasAlertThatPasses(callable $predicate)
+ * @method bool hasCriticalThatPasses(callable $predicate)
+ * @method bool hasErrorThatPasses(callable $predicate)
+ * @method bool hasWarningThatPasses(callable $predicate)
+ * @method bool hasNoticeThatPasses(callable $predicate)
+ * @method bool hasInfoThatPasses(callable $predicate)
+ * @method bool hasDebugThatPasses(callable $predicate)
  *
  * Adapted from psr/log,
  * Copyright (c) 2012 PHP Framework Interoperability Group
@@ -133,7 +133,7 @@ final class TestLogger extends AbstractLogger
      * @param callable(array<string, mixed>, int): bool $predicate
      * @param LogLevel::*                               $level
      */
-    public function hasRecordThatPasses(callable $predicate, $level): bool
+    public function hasRecordThatPasses(callable $predicate, string $level): bool
     {
         if (! isset($this->recordsByLevel[$level])) {
             return false;

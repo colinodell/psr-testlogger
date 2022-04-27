@@ -4,6 +4,11 @@ Updates should follow the [Keep a CHANGELOG](https://keepachangelog.com/) princi
 
 ## [Unreleased][unreleased]
 
+### Fixed
+
+ - Fixed incorrect parameters in magic method docblocks
+ - Fixed missing `string` type to `hasRecordThatPasses()`
+
 ## [1.0.0] - 2022-02-17
 
 **Initial commit!**
