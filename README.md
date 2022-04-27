@@ -67,6 +67,7 @@ hasInfoThatMatches(string $regex): bool
 hasDebugThatMatches(string $regex): bool
 
 hasRecordThatPasses(callable $predicate, string $level): bool
+
 hasEmergencyThatPasses(callable $predicate): bool
 hasAlertThatPasses(callable $predicate): bool
 hasCriticalThatPasses(callable $predicate): bool
