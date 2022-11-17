@@ -89,3 +89,7 @@ Issues and PRs for bug fixes are welcome and will be merged/released on an as-ne
 ## Backward Compatibility
 
 This library strictly follows SemVer using [Symfony's BC Promise](https://symfony.com/doc/current/contributing/code/bc.html) as a guide.
+
+## Reporting Security Issues
+
+Please report security issues directly to the library author instead of using the issue tracker. Contact info can be found in `composer.json`.
