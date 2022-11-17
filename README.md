@@ -79,3 +79,13 @@ hasNoticeThatPasses(callable $predicate): bool
 hasInfoThatPasses(callable $predicate): bool
 hasDebugThatPasses(callable $predicate): bool
 ```
+
+## Release Cycle
+
+This library is considered stable. No new development is currently planned unless needed to fix issues or maintain compatibility with the psr/log library.
+
+Issues and PRs for bug fixes are welcome and will be merged/released on an as-needed basis.
+
+## Backward Compatibility
+
+This library strictly follows SemVer using [Symfony's BC Promise](https://symfony.com/doc/current/contributing/code/bc.html) as a guide.
