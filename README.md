@@ -7,7 +7,7 @@
 [![Psalm Type Coverage](https://shepherd.dev/github/colinodell/psr-testlogger/coverage.svg)](https://shepherd.dev/github/colinodell/psr-testlogger)
 [![Sponsor development of this project](https://img.shields.io/badge/sponsor%20this%20package-%E2%9D%A4-ff69b4.svg?style=flat-square)](https://www.colinodell.com/sponsor)
 
-PSR-3 compliant test logger based on psr/log v1's
+PSR-3 compliant test logger based on psr/log v1's, but compatible with v2 and v3 too!
 
 ## 📦 Installation
 

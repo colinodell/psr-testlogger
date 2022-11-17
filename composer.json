@@ -1,7 +1,7 @@
 {
     "name": "colinodell/psr-testlogger",
     "type": "library",
-    "description": "PSR-3 compliant test logger based on psr/log v1's",
+    "description": "PSR-3 compliant test logger based on psr/log v1's, but compatible with v2 and v3 too!",
     "keywords": ["psr","log","logger","logging","test","mock","unit","phpunit"],
     "homepage": "https://github.com/colinodell/psr-testlogger",
     "license": "MIT",
