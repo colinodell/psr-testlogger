@@ -45,6 +45,11 @@ final class TestLoggerTest extends TestCase
         $this->assertTrue($logger->hasRecord(['message' => 'Test'], $level));
         $this->assertTrue($logger->$magicMethod('Test'));
         $this->assertTrue($logger->$magicMethod(['message' => 'Test']));
+
+        $this->assertFalse($logger->hasRecord('Some message we have not logged', $level));
+        $this->assertFalse($logger->hasRecord(['message' => 'Some message we have not logged'], $level));
+        $this->assertFalse($logger->$magicMethod('Some message we have not logged'));
+        $this->assertFalse($logger->$magicMethod(['message' => 'Some message we have not logged']));
     }
 
     /**
@@ -104,6 +109,10 @@ final class TestLoggerTest extends TestCase
         $this->assertTrue($logger->$magicMethod(static function ($record) {
             return $record['message'] === 'Test';
         }));
+
+        $this->assertFalse($logger->hasRecordThatPasses(static function ($record) {
+            return $record['message'] === 'Some message we have not logged';
+        }, $level));
     }
 
     public function testReset(): void
@@ -115,6 +124,16 @@ final class TestLoggerTest extends TestCase
 
         $logger->reset();
         $this->assertFalse($logger->hasRecords(LogLevel::DEBUG));
+    }
+
+    public function testCallMagicMethodThatDoesNotExist(): void
+    {
+        $logger = new TestLogger();
+
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage('Call to undefined method');
+
+        $logger->someMethodThatDoesNotExist(); // @phpstan-ignore-line
     }
 
     /**
