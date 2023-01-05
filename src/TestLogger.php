@@ -65,6 +65,27 @@ final class TestLogger extends AbstractLogger
     /** @var array<int|string, array<int, array<string, mixed>>> */
     public array $recordsByLevel = [];
 
+    /** @var array<string, string|int> */
+    public array $levelMap = [
+                LogLevel::EMERGENCY => LogLevel::EMERGENCY,
+                LogLevel::ALERT => LogLevel::ALERT,
+                LogLevel::CRITICAL => LogLevel::CRITICAL,
+                LogLevel::ERROR => LogLevel::ERROR,
+                LogLevel::WARNING => LogLevel::WARNING,
+                LogLevel::NOTICE => LogLevel::NOTICE,
+                LogLevel::INFO => LogLevel::INFO,
+                LogLevel::DEBUG => LogLevel::DEBUG,
+            ];
+
+    /**
+     * @param null|array<string, string|int> $levelMap
+     *   Keys are LogLevel::*, values are alternative strings or integers used as log levels in the SUT.
+     */
+    public function __construct(?array $levelMap = NULL)
+    {
+        $this->levelMap = $levelMap ?? $this->levelMap;
+    }    
+    
     /**
      * {@inheritDoc}
      *
@@ -83,18 +104,18 @@ final class TestLogger extends AbstractLogger
     }
 
     /**
-     * @param LogLevel::* $level
+     * @param string|int $level
      */
-    public function hasRecords(string $level): bool
+    public function hasRecords(string|int $level): bool
     {
         return isset($this->recordsByLevel[$level]);
     }
 
     /**
      * @param string|array<string, mixed> $record
-     * @param LogLevel::*                 $level
+     * @param string|int                  $level
      */
-    public function hasRecord($record, string $level): bool
+    public function hasRecord($record, string|int $level): bool
     {
         if (\is_string($record)) {
             $record = ['message' => $record];
@@ -110,9 +131,9 @@ final class TestLogger extends AbstractLogger
     }
 
     /**
-     * @param LogLevel::* $level
+     * @param string|int $level
      */
-    public function hasRecordThatContains(string $message, string $level): bool
+    public function hasRecordThatContains(string $message, string|int $level): bool
     {
         return $this->hasRecordThatPasses(static function (array $rec) use ($message) {
             return \strpos($rec['message'], $message) !== false;
@@ -120,9 +141,9 @@ final class TestLogger extends AbstractLogger
     }
 
     /**
-     * @param LogLevel::* $level
+     * @param string|int $level
      */
-    public function hasRecordThatMatches(string $regex, string $level): bool
+    public function hasRecordThatMatches(string $regex, string|int $level): bool
     {
         return $this->hasRecordThatPasses(static function ($rec) use ($regex) {
             return \preg_match($regex, $rec['message']) > 0;
@@ -131,9 +152,9 @@ final class TestLogger extends AbstractLogger
 
     /**
      * @param callable(array<string, mixed>, int): bool $predicate
-     * @param LogLevel::*                               $level
+     * @param string|int                                $level
      */
-    public function hasRecordThatPasses(callable $predicate, string $level): bool
+    public function hasRecordThatPasses(callable $predicate, string|int $level): bool
     {
         if (! isset($this->recordsByLevel[$level])) {
             return false;
@@ -153,10 +174,11 @@ final class TestLogger extends AbstractLogger
      */
     public function __call(string $method, array $args): bool
     {
-        if (\preg_match('/(.*)(Debug|Info|Notice|Warning|Error|Critical|Alert|Emergency)(.*)/', $method, $matches) > 0) {
+        $levelNames = implode('|', array_map('ucfirst', array_keys($this->levelMap)));
+        if (\preg_match('/(.*)(' . $levelNames . ')(.*)/', $method, $matches) > 0) {
             $genericMethod = $matches[1] . ($matches[3] !== 'Records' ? 'Record' : '') . $matches[3];
             $callable      = [$this, $genericMethod];
-            $level         = \strtolower($matches[2]);
+            $level         = $this->levelMap[\strtolower($matches[2])];
             if (\is_callable($callable)) {
                 $args[] = $level;
 
@@ -166,7 +188,7 @@ final class TestLogger extends AbstractLogger
 
         throw new \BadMethodCallException('Call to undefined method ' . static::class . '::' . $method . '()');
     }
-
+    
     public function reset(): void
     {
         $this->records        = [];
