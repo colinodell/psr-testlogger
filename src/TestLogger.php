@@ -67,25 +67,25 @@ final class TestLogger extends AbstractLogger
 
     /** @var array<string, string|int> */
     public array $levelMap = [
-                LogLevel::EMERGENCY => LogLevel::EMERGENCY,
-                LogLevel::ALERT => LogLevel::ALERT,
-                LogLevel::CRITICAL => LogLevel::CRITICAL,
-                LogLevel::ERROR => LogLevel::ERROR,
-                LogLevel::WARNING => LogLevel::WARNING,
-                LogLevel::NOTICE => LogLevel::NOTICE,
-                LogLevel::INFO => LogLevel::INFO,
-                LogLevel::DEBUG => LogLevel::DEBUG,
-            ];
+        LogLevel::EMERGENCY => LogLevel::EMERGENCY,
+        LogLevel::ALERT => LogLevel::ALERT,
+        LogLevel::CRITICAL => LogLevel::CRITICAL,
+        LogLevel::ERROR => LogLevel::ERROR,
+        LogLevel::WARNING => LogLevel::WARNING,
+        LogLevel::NOTICE => LogLevel::NOTICE,
+        LogLevel::INFO => LogLevel::INFO,
+        LogLevel::DEBUG => LogLevel::DEBUG,
+    ];
 
     /**
-     * @param null|array<string, string|int> $levelMap
+     * @param array<string, string|int>|null $levelMap
      *   Keys are LogLevel::*, values are alternative strings or integers used as log levels in the SUT.
      */
-    public function __construct(?array $levelMap = NULL)
+    public function __construct(?array $levelMap = null)
     {
         $this->levelMap = $levelMap ?? $this->levelMap;
-    }    
-    
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -174,7 +174,7 @@ final class TestLogger extends AbstractLogger
      */
     public function __call(string $method, array $args): bool
     {
-        $levelNames = implode('|', array_map('ucfirst', array_keys($this->levelMap)));
+        $levelNames = \implode('|', \array_map('ucfirst', \array_keys($this->levelMap)));
         if (\preg_match('/(.*)(' . $levelNames . ')(.*)/', $method, $matches) > 0) {
             $genericMethod = $matches[1] . ($matches[3] !== 'Records' ? 'Record' : '') . $matches[3];
             $callable      = [$this, $genericMethod];
@@ -188,7 +188,7 @@ final class TestLogger extends AbstractLogger
 
         throw new \BadMethodCallException('Call to undefined method ' . static::class . '::' . $method . '()');
     }
-    
+
     public function reset(): void
     {
         $this->records        = [];
