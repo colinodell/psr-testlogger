@@ -66,7 +66,7 @@ final class TestLogger extends AbstractLogger
     public array $recordsByLevel = [];
 
     /** @var array<string, string|int> */
-    public array $levelMap = [
+    private array $levelMap = [
         LogLevel::EMERGENCY => LogLevel::EMERGENCY,
         LogLevel::ALERT => LogLevel::ALERT,
         LogLevel::CRITICAL => LogLevel::CRITICAL,
