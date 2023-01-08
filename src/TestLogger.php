@@ -60,13 +60,13 @@ use Psr\Log\LogLevel;
 final class TestLogger extends AbstractLogger
 {
     /** @var array<int, array<string, mixed>> */
-    public array $records = [];
+    public array $records        = [];
 
     /** @var array<string|int, array<int, array<string, mixed>>> */
     public array $recordsByLevel = [];
 
     /** @var array<LogLevel::*, string|int> */
-    private array $levelMap = [
+    private array $levelMap      = [
         LogLevel::EMERGENCY => LogLevel::EMERGENCY,
         LogLevel::ALERT => LogLevel::ALERT,
         LogLevel::CRITICAL => LogLevel::CRITICAL,
@@ -81,14 +81,15 @@ final class TestLogger extends AbstractLogger
      * @param array<LogLevel::*, string|int>|null $levelMap
      *   Keys are LogLevel::*, values are alternative strings or integers used as log levels in the SUT.
      */
-    public function __construct(?array $levelMap = null)
+    public function __construct(array $levelMap = null)
     {
-        if (is_array($levelMap)) {
+        if (\is_array($levelMap)) {
             $passedKeys = \array_keys($levelMap);
             if ($passedKeys !== \array_keys($this->levelMap)) {
-                throw new \InvalidArgumentException("Level map keys must be the LogLevel::* values; passed " . print_r($passedKeys, TRUE));
+                throw new \InvalidArgumentException('Level map keys must be the LogLevel::* values; passed ' . \print_r($passedKeys, true));
             }
         }
+
         $this->levelMap = $levelMap ?? $this->levelMap;
     }
 
@@ -119,9 +120,8 @@ final class TestLogger extends AbstractLogger
 
     /**
      * @param string|array<string, mixed> $record
-     * @param string|int                  $level
      */
-    public function hasRecord($record, string|int $level): bool
+    public function hasRecord(string|array $record, string|int $level): bool
     {
         if (\is_string($record)) {
             $record = ['message' => $record];
@@ -136,9 +136,6 @@ final class TestLogger extends AbstractLogger
         }, $level);
     }
 
-    /**
-     * @param string|int $level
-     */
     public function hasRecordThatContains(string $message, string|int $level): bool
     {
         return $this->hasRecordThatPasses(static function (array $rec) use ($message) {
@@ -146,9 +143,6 @@ final class TestLogger extends AbstractLogger
         }, $level);
     }
 
-    /**
-     * @param string|int $level
-     */
     public function hasRecordThatMatches(string $regex, string|int $level): bool
     {
         return $this->hasRecordThatPasses(static function ($rec) use ($regex) {
@@ -158,7 +152,6 @@ final class TestLogger extends AbstractLogger
 
     /**
      * @param callable(array<string, mixed>, int): bool $predicate
-     * @param string|int                                $level
      */
     public function hasRecordThatPasses(callable $predicate, string|int $level): bool
     {
