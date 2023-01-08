@@ -135,7 +135,7 @@ final class TestLoggerTest extends TestCase
 
         $logger->someMethodThatDoesNotExist(); // @phpstan-ignore-line
     }
-    
+
     /**
      * @dataProvider provideLogLevels
      */
@@ -152,7 +152,6 @@ final class TestLoggerTest extends TestCase
             LogLevel::DEBUG => 7,
         ];
         $level = $levelMap[$canonicalLevel];
-        
         $magicMethod = 'has' . \ucfirst($canonicalLevel) . 'Records';
 
         $logger = new TestLogger($levelMap);
@@ -162,7 +161,7 @@ final class TestLoggerTest extends TestCase
         $logger->log($level, 'Test');
         $this->assertTrue($logger->hasRecords($level));
         $this->assertTrue($logger->$magicMethod());
-        
+
         $this->expectException(\InvalidArgumentException::class);
         $logger = new TestLogger(\array_shift($levelMap));
     }
