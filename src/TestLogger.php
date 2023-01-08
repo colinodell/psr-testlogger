@@ -60,13 +60,13 @@ use Psr\Log\LogLevel;
 final class TestLogger extends AbstractLogger
 {
     /** @var array<int, array<string, mixed>> */
-    public array $records        = [];
+    public array $records = [];
 
     /** @var array<string|int, array<int, array<string, mixed>>> */
     public array $recordsByLevel = [];
 
     /** @var array<LogLevel::*, string|int> */
-    private array $levelMap      = [
+    private array $levelMap = [
         LogLevel::EMERGENCY => LogLevel::EMERGENCY,
         LogLevel::ALERT => LogLevel::ALERT,
         LogLevel::CRITICAL => LogLevel::CRITICAL,
@@ -81,7 +81,7 @@ final class TestLogger extends AbstractLogger
      * @param array<LogLevel::*, string|int>|null $levelMap
      *   Keys are LogLevel::*, values are alternative strings or integers used as log levels in the SUT.
      */
-    public function __construct(array $levelMap = null)
+    public function __construct(array|null $levelMap = null)
     {
         if (\is_array($levelMap)) {
             $passedKeys = \array_keys($levelMap);
@@ -110,9 +110,6 @@ final class TestLogger extends AbstractLogger
         $this->records[]                          = $record;
     }
 
-    /**
-     * @param string|int $level
-     */
     public function hasRecords(string|int $level): bool
     {
         return isset($this->recordsByLevel[$level]);
