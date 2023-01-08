@@ -161,10 +161,21 @@ final class TestLoggerTest extends TestCase
         $logger->log($level, 'Test');
         $this->assertTrue($logger->hasRecords($level));
         $this->assertTrue($logger->$magicMethod());
-
-        $this->expectException(\InvalidArgumentException::class);
-        $logger = new TestLogger(\array_shift($levelMap));
     }
+
+    public function testBadLevelMap(): void
+    {
+        $levelMap = [
+            LogLevel::CRITICAL => 2,
+            LogLevel::ERROR => 3,
+            LogLevel::WARNING => 4,
+            LogLevel::NOTICE => 5,
+            LogLevel::INFO => 6,
+            LogLevel::DEBUG => 7,
+        ];
+        $this->expectException(\InvalidArgumentException::class);
+        $logger = new TestLogger($levelMap);
+    }    
 
     /**
      * @return iterable<array<mixed>>
