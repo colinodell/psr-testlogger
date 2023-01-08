@@ -62,10 +62,10 @@ final class TestLogger extends AbstractLogger
     /** @var array<int, array<string, mixed>> */
     public array $records = [];
 
-    /** @var array<int|string, array<int, array<string, mixed>>> */
+    /** @var array<string|int, array<int, array<string, mixed>>> */
     public array $recordsByLevel = [];
 
-    /** @var array<string, string|int> */
+    /** @var array<LogLevel::*, string|int> */
     private array $levelMap = [
         LogLevel::EMERGENCY => LogLevel::EMERGENCY,
         LogLevel::ALERT => LogLevel::ALERT,
@@ -78,11 +78,17 @@ final class TestLogger extends AbstractLogger
     ];
 
     /**
-     * @param array<string, string|int>|null $levelMap
+     * @param array<LogLevel::*, string|int>|null $levelMap
      *   Keys are LogLevel::*, values are alternative strings or integers used as log levels in the SUT.
      */
     public function __construct(?array $levelMap = null)
     {
+        if (is_array($levelMap)) {
+            $passedKeys = \array_keys($levelMap);
+            if ($passedKeys !== \array_keys($this->levelMap)) {
+                throw new \InvalidArgumentException("Level map keys must be the LogLevel::* values; passed " . print_r($passedKeys, TRUE));
+            }
+        }
         $this->levelMap = $levelMap ?? $this->levelMap;
     }
 
