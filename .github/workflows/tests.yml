@@ -14,7 +14,7 @@ jobs:
 
             - uses: shivammathur/setup-php@v2
               with:
-                  php-version: 7.4
+                  php-version: 8.0
                   coverage: none
                   tools: composer:v2, cs2pr
 
@@ -34,17 +34,6 @@ jobs:
                 stable: [true]
                 coverage: [true]
                 composer-flags: ['', '--prefer-lowest']
-                include:
-                    - php: '7.4'
-                      psrlog: '^1.0'
-                      stable: true
-                      coverage: true
-                      composer-flags: ''
-                    - php: '7.4'
-                      psrlog: '^1.0'
-                      stable: true
-                      coverage: true
-                      composer-flags: '--prefer-lowest'
 
         steps:
             - uses: actions/checkout@v2
@@ -80,7 +69,7 @@ jobs:
 
             - uses: shivammathur/setup-php@v2
               with:
-                  php-version: 7.4
+                  php-version: 8.0
                   coverage: none
                   tools: composer:v2
 
@@ -97,7 +86,7 @@ jobs:
 
             - uses: shivammathur/setup-php@v2
               with:
-                  php-version: 7.4
+                  php-version: 8.0
                   coverage: none
                   tools: composer:v2
 
