@@ -151,7 +151,8 @@ final class TestLoggerTest extends TestCase
             LogLevel::INFO => 6,
             LogLevel::DEBUG => 7,
         ];
-        $level = $levelMap[$canonicalLevel];
+        $level    = $levelMap[$canonicalLevel];
+
         $magicMethod = 'has' . \ucfirst($canonicalLevel) . 'Records';
 
         $logger = new TestLogger($levelMap);
@@ -175,7 +176,7 @@ final class TestLoggerTest extends TestCase
         ];
         $this->expectException(\InvalidArgumentException::class);
         $logger = new TestLogger($levelMap);
-    }    
+    }
 
     /**
      * @return iterable<array<mixed>>
