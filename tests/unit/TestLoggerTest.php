@@ -178,6 +178,25 @@ final class TestLoggerTest extends TestCase
         $logger = new TestLogger($levelMap);
     }
 
+    public function testLevelMapOrderDoesNotMatter(): void
+    {
+        $levelMap = [
+            LogLevel::DEBUG => 7,
+            LogLevel::INFO => 6,
+            LogLevel::NOTICE => 5,
+            LogLevel::WARNING => 4,
+            LogLevel::ERROR => 3,
+            LogLevel::CRITICAL => 2,
+            LogLevel::ALERT => 1,
+            LogLevel::EMERGENCY => 0,
+        ];
+
+        $logger = new TestLogger($levelMap);
+
+        // Random assertion to prove there's no validation error
+        $this->assertFalse($logger->hasDebugRecords());
+    }
+
     /**
      * @return iterable<array<mixed>>
      */

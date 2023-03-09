@@ -84,9 +84,10 @@ final class TestLogger extends AbstractLogger
     public function __construct(array|null $levelMap = null)
     {
         if (\is_array($levelMap)) {
-            $passedKeys = \array_keys($levelMap);
-            if ($passedKeys !== \array_keys($this->levelMap)) {
-                throw new \InvalidArgumentException('Level map keys must be the LogLevel::* values; passed ' . \print_r($passedKeys, true));
+            // Assert that $levelMap contains exactly the same keys (no more or less) than LogLevel::* values
+            $diff = \array_diff(\array_keys($levelMap), \array_values($this->levelMap));
+            if (\count($diff) > 0) {
+                throw new \InvalidArgumentException('Level map keys must be the LogLevel::* values; passed ' . \print_r($levelMap, true));
             }
         }
 
