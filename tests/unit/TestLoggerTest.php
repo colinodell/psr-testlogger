@@ -136,64 +136,37 @@ final class TestLoggerTest extends TestCase
         $logger->someMethodThatDoesNotExist(); // @phpstan-ignore-line
     }
 
-    /**
-     * @dataProvider provideLogLevels
-     */
-    public function testIntegerLevels(string $canonicalLevel): void
+    public function testCustomLogLevels(): void
     {
-        $levelMap = [
-            LogLevel::EMERGENCY => 0,
-            LogLevel::ALERT => 1,
-            LogLevel::CRITICAL => 2,
-            LogLevel::ERROR => 3,
-            LogLevel::WARNING => 4,
-            LogLevel::NOTICE => 5,
-            LogLevel::INFO => 6,
-            LogLevel::DEBUG => 7,
-        ];
-        $level    = $levelMap[$canonicalLevel];
-
-        $magicMethod = 'has' . \ucfirst($canonicalLevel) . 'Records';
-
-        $logger = new TestLogger($levelMap);
-        $this->assertFalse($logger->hasRecords($level));
-        $this->assertFalse($logger->$magicMethod());
-
-        $logger->log($level, 'Test');
-        $this->assertTrue($logger->hasRecords($level));
-        $this->assertTrue($logger->$magicMethod());
-    }
-
-    public function testBadLevelMap(): void
-    {
-        $levelMap = [
-            LogLevel::CRITICAL => 2,
-            LogLevel::ERROR => 3,
-            LogLevel::WARNING => 4,
-            LogLevel::NOTICE => 5,
-            LogLevel::INFO => 6,
-            LogLevel::DEBUG => 7,
-        ];
-        $this->expectException(\InvalidArgumentException::class);
-        $logger = new TestLogger($levelMap);
-    }
-
-    public function testLevelMapOrderDoesNotMatter(): void
-    {
-        $levelMap = [
-            LogLevel::DEBUG => 7,
-            LogLevel::INFO => 6,
-            LogLevel::NOTICE => 5,
-            LogLevel::WARNING => 4,
-            LogLevel::ERROR => 3,
-            LogLevel::CRITICAL => 2,
-            LogLevel::ALERT => 1,
-            LogLevel::EMERGENCY => 0,
+        $recordsToLog = [
+            0 => 'Emergency',
+            1 => 'Alert',
+            2 => 'Critical',
+            3 => 'Error',
+            4 => 'Warning',
+            5 => 'Notice',
+            6 => 'Informational',
+            7 => 'Debug',
+            'super low priority' => 'Super Low Priority',
         ];
 
-        $logger = new TestLogger($levelMap);
+        $logger = new TestLogger();
 
-        // Random assertion to prove there's no validation error
+        foreach ($recordsToLog as $level => $message) {
+            $logger->log($level, $message);
+            $this->assertTrue($logger->hasRecord($message, $level));
+        }
+
+        $this->assertCount(\count($recordsToLog), $logger->records);
+
+        // Custom log levels don't work with the magic methods
+        $this->assertFalse($logger->hasEmergencyRecords());
+        $this->assertFalse($logger->hasAlertRecords());
+        $this->assertFalse($logger->hasCriticalRecords());
+        $this->assertFalse($logger->hasErrorRecords());
+        $this->assertFalse($logger->hasWarningRecords());
+        $this->assertFalse($logger->hasNoticeRecords());
+        $this->assertFalse($logger->hasInfoRecords());
         $this->assertFalse($logger->hasDebugRecords());
     }
 

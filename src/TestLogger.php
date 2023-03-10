@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ColinODell\PsrTestLogger;
 
 use Psr\Log\AbstractLogger;
-use Psr\Log\LogLevel;
 
 /**
  * Used for testing purposes.
@@ -64,35 +63,6 @@ final class TestLogger extends AbstractLogger
 
     /** @var array<string|int, array<int, array<string, mixed>>> */
     public array $recordsByLevel = [];
-
-    /** @var array<LogLevel::*, string|int> */
-    private array $levelMap = [
-        LogLevel::EMERGENCY => LogLevel::EMERGENCY,
-        LogLevel::ALERT => LogLevel::ALERT,
-        LogLevel::CRITICAL => LogLevel::CRITICAL,
-        LogLevel::ERROR => LogLevel::ERROR,
-        LogLevel::WARNING => LogLevel::WARNING,
-        LogLevel::NOTICE => LogLevel::NOTICE,
-        LogLevel::INFO => LogLevel::INFO,
-        LogLevel::DEBUG => LogLevel::DEBUG,
-    ];
-
-    /**
-     * @param array<LogLevel::*, string|int>|null $levelMap
-     *   Keys are LogLevel::*, values are alternative strings or integers used as log levels in the SUT.
-     */
-    public function __construct(array|null $levelMap = null)
-    {
-        if (\is_array($levelMap)) {
-            // Assert that $levelMap contains exactly the same keys (no more or less) than LogLevel::* values
-            $diff = \array_diff(\array_keys($levelMap), \array_values($this->levelMap));
-            if (\count($diff) > 0) {
-                throw new \InvalidArgumentException('Level map keys must be the LogLevel::* values; passed ' . \print_r($levelMap, true));
-            }
-        }
-
-        $this->levelMap = $levelMap ?? $this->levelMap;
-    }
 
     /**
      * {@inheritDoc}
@@ -171,11 +141,10 @@ final class TestLogger extends AbstractLogger
      */
     public function __call(string $method, array $args): bool
     {
-        $levelNames = \implode('|', \array_map('ucfirst', \array_keys($this->levelMap)));
-        if (\preg_match('/(.*)(' . $levelNames . ')(.*)/', $method, $matches) > 0) {
+        if (\preg_match('/(.*)(Debug|Info|Notice|Warning|Error|Critical|Alert|Emergency)(.*)/', $method, $matches) > 0) {
             $genericMethod = $matches[1] . ($matches[3] !== 'Records' ? 'Record' : '') . $matches[3];
             $callable      = [$this, $genericMethod];
-            $level         = $this->levelMap[\strtolower($matches[2])];
+            $level         = \strtolower($matches[2]);
             if (\is_callable($callable)) {
                 $args[] = $level;
 
