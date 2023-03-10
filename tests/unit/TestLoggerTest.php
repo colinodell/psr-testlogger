@@ -6,6 +6,7 @@ namespace ColinODell\PsrTestLogger\Tests\Unit;
 
 use ColinODell\PsrTestLogger\TestLogger;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\InvalidArgumentException;
 use Psr\Log\LogLevel;
 
 final class TestLoggerTest extends TestCase
@@ -134,6 +135,33 @@ final class TestLoggerTest extends TestCase
         $this->expectExceptionMessage('Call to undefined method');
 
         $logger->someMethodThatDoesNotExist(); // @phpstan-ignore-line
+    }
+
+    /**
+     * @dataProvider provideInvalidLogLevels
+     */
+    public function testLogWithUnsupportedLevel(mixed $invalidLogLevel): void
+    {
+        $logger = new TestLogger();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported log level');
+
+        $logger->log($invalidLogLevel, 'Test');
+    }
+
+    /**
+     * @return iterable<string, array{0: mixed}>
+     */
+    public function provideInvalidLogLevels(): iterable
+    {
+        yield 'null' => [null];
+        yield 'bool' => [true];
+        yield 'float' => [1.0];
+        yield 'array' => [[]];
+        yield 'object' => [new \stdClass()];
+        yield 'resource' => [\fopen('php://memory', 'r')];
+        yield 'callable' => [static fn () => null];
     }
 
     public function testCustomLogLevels(): void

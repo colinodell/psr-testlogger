@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ColinODell\PsrTestLogger;
 
 use Psr\Log\AbstractLogger;
+use Psr\Log\InvalidArgumentException;
 
 /**
  * Used for testing purposes.
@@ -71,6 +72,10 @@ final class TestLogger extends AbstractLogger
      */
     public function log($level, $message, array $context = []): void
     {
+        if (! (\is_string($level) || \is_int($level))) {
+            throw new InvalidArgumentException('Unsupported log level. The psr-testlogger library only supports string and integer log levels; passed ' . \print_r($level, true));
+        }
+
         $record = [
             'level' => $level,
             'message' => $message,
