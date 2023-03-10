@@ -112,7 +112,7 @@ final class TestLogger extends AbstractLogger
     public function hasRecordThatContains(string $message, string|int $level): bool
     {
         return $this->hasRecordThatPasses(static function (array $rec) use ($message) {
-            return \strpos($rec['message'], $message) !== false;
+            return \str_contains($rec['message'], $message);
         }, $level);
     }
 
@@ -157,7 +157,7 @@ final class TestLogger extends AbstractLogger
             }
         }
 
-        throw new \BadMethodCallException('Call to undefined method ' . static::class . '::' . $method . '()');
+        throw new \BadMethodCallException('Call to undefined method ' . self::class . '::' . $method . '()');
     }
 
     public function reset(): void
