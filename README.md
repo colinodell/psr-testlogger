@@ -24,7 +24,7 @@ $ composer require --dev colinodell/psr-testlogger
 This package provides a PSR-3 compliant logger useful for testing.  Simply log messages to it like usual, and use one of the many available methods to perform assertions on the logged messages.
 
 ```
-hasRecords(string $level): bool
+hasRecords(string|int $level): bool
 
 hasEmergencyRecords(): bool
 hasAlertRecords(): bool
@@ -35,7 +35,7 @@ hasNoticeRecords(): bool
 hasInfoRecords(): bool
 hasDebugRecords(): bool
 
-hasRecord(string|array $record, string $level): bool
+hasRecord(string|array $record, string|int $level): bool
 
 hasEmergency(string|array $record): bool
 hasAlert(string|array $record): bool
@@ -46,7 +46,7 @@ hasNotice(string|array $record): bool
 hasInfo(string|array $record): bool
 hasDebug(string|array $record): bool
 
-hasRecordThatContains(string $message, string $level): bool
+hasRecordThatContains(string $message, string|int $level): bool
 
 hasEmergencyThatContains(string $message): bool
 hasAlertThatContains(string $message): bool
@@ -57,7 +57,7 @@ hasNoticeThatContains(string $message): bool
 hasInfoThatContains(string $message): bool
 hasDebugThatContains(string $message): bool
 
-hasRecordThatMatches(string $regex, string $level): bool
+hasRecordThatMatches(string $regex, string|int $level): bool
 
 hasEmergencyThatMatches(string $regex): bool
 hasAlertThatMatches(string $regex): bool
@@ -68,7 +68,7 @@ hasNoticeThatMatches(string $regex): bool
 hasInfoThatMatches(string $regex): bool
 hasDebugThatMatches(string $regex): bool
 
-hasRecordThatPasses(callable $predicate, string $level): bool
+hasRecordThatPasses(callable $predicate, string|int $level): bool
 
 hasEmergencyThatPasses(callable $predicate): bool
 hasAlertThatPasses(callable $predicate): bool
@@ -79,6 +79,8 @@ hasNoticeThatPasses(callable $predicate): bool
 hasInfoThatPasses(callable $predicate): bool
 hasDebugThatPasses(callable $predicate): bool
 ```
+
+In addition to the standard PSR-3 log levels, this test logger also supports custom `string` and `int` levels when using `log()`. Other types are not supported.
 
 ## Release Cycle
 
