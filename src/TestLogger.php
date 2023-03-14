@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ColinODell\PsrTestLogger;
 
 use Psr\Log\AbstractLogger;
-use Psr\Log\LogLevel;
+use Psr\Log\InvalidArgumentException;
 
 /**
  * Used for testing purposes.
@@ -62,7 +62,7 @@ final class TestLogger extends AbstractLogger
     /** @var array<int, array<string, mixed>> */
     public array $records = [];
 
-    /** @var array<int|string, array<int, array<string, mixed>>> */
+    /** @var array<string|int, array<int, array<string, mixed>>> */
     public array $recordsByLevel = [];
 
     /**
@@ -72,6 +72,10 @@ final class TestLogger extends AbstractLogger
      */
     public function log($level, $message, array $context = []): void
     {
+        if (! (\is_string($level) || \is_int($level))) {
+            throw new InvalidArgumentException('Unsupported log level. The psr-testlogger library only supports string and integer log levels; passed ' . \print_r($level, true));
+        }
+
         $record = [
             'level' => $level,
             'message' => $message,
@@ -82,19 +86,15 @@ final class TestLogger extends AbstractLogger
         $this->records[]                          = $record;
     }
 
-    /**
-     * @param LogLevel::* $level
-     */
-    public function hasRecords(string $level): bool
+    public function hasRecords(string|int $level): bool
     {
         return isset($this->recordsByLevel[$level]);
     }
 
     /**
      * @param string|array<string, mixed> $record
-     * @param LogLevel::*                 $level
      */
-    public function hasRecord($record, string $level): bool
+    public function hasRecord(string|array $record, string|int $level): bool
     {
         if (\is_string($record)) {
             $record = ['message' => $record];
@@ -109,20 +109,14 @@ final class TestLogger extends AbstractLogger
         }, $level);
     }
 
-    /**
-     * @param LogLevel::* $level
-     */
-    public function hasRecordThatContains(string $message, string $level): bool
+    public function hasRecordThatContains(string $message, string|int $level): bool
     {
         return $this->hasRecordThatPasses(static function (array $rec) use ($message) {
-            return \strpos($rec['message'], $message) !== false;
+            return \str_contains($rec['message'], $message);
         }, $level);
     }
 
-    /**
-     * @param LogLevel::* $level
-     */
-    public function hasRecordThatMatches(string $regex, string $level): bool
+    public function hasRecordThatMatches(string $regex, string|int $level): bool
     {
         return $this->hasRecordThatPasses(static function ($rec) use ($regex) {
             return \preg_match($regex, $rec['message']) > 0;
@@ -131,9 +125,8 @@ final class TestLogger extends AbstractLogger
 
     /**
      * @param callable(array<string, mixed>, int): bool $predicate
-     * @param LogLevel::*                               $level
      */
-    public function hasRecordThatPasses(callable $predicate, string $level): bool
+    public function hasRecordThatPasses(callable $predicate, string|int $level): bool
     {
         if (! isset($this->recordsByLevel[$level])) {
             return false;
@@ -164,7 +157,7 @@ final class TestLogger extends AbstractLogger
             }
         }
 
-        throw new \BadMethodCallException('Call to undefined method ' . static::class . '::' . $method . '()');
+        throw new \BadMethodCallException('Call to undefined method ' . self::class . '::' . $method . '()');
     }
 
     public function reset(): void
