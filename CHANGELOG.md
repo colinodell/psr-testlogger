@@ -4,6 +4,7 @@ Updates should follow the [Keep a CHANGELOG](https://keepachangelog.com/) princi
 
 ## [Unreleased][unreleased]
 
+## [1.2.0] - 2023-03-14
 ### Added
 
  - Added support for custom string- and int-based log levels (#2)
@@ -31,6 +32,7 @@ Updates should follow the [Keep a CHANGELOG](https://keepachangelog.com/) princi
 
 **Initial commit!**
 
-[unreleased]: https://github.com/colinodell/psr-testlogger/compare/v1.1.0...main
+[unreleased]: https://github.com/colinodell/psr-testlogger/compare/v1.2.0...main
+[1.2.0]: https://github.com/colinodell/psr-testlogger/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/colinodell/psr-testlogger/compare/v1.0.0...main
 [1.0.0]: https://github.com/colinodell/psr-testlogger/releases/tag/v1.0.0
