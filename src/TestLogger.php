@@ -78,7 +78,7 @@ final class TestLogger extends AbstractLogger
 
         $record = [
             'level' => $level,
-            'message' => $message,
+            'message' => (string) $message,
             'context' => $context,
         ];
 
