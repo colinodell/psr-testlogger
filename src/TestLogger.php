@@ -86,15 +86,19 @@ final class TestLogger extends AbstractLogger
         $this->records[]                          = $record;
     }
 
-    public function hasRecords(string|int $level): bool
+    public function hasRecords(string|int|null $level = null): bool
     {
+        if ($level === null) {
+            return \count($this->records) !== 0;
+        }
+
         return isset($this->recordsByLevel[$level]);
     }
 
     /**
      * @param string|array<string, mixed> $record
      */
-    public function hasRecord(string|array $record, string|int $level): bool
+    public function hasRecord(string|array $record, string|int|null $level = null): bool
     {
         if (\is_string($record)) {
             $record = ['message' => $record];
@@ -109,14 +113,14 @@ final class TestLogger extends AbstractLogger
         }, $level);
     }
 
-    public function hasRecordThatContains(string $message, string|int $level): bool
+    public function hasRecordThatContains(string $message, string|int|null $level = null): bool
     {
         return $this->hasRecordThatPasses(static function (array $rec) use ($message) {
             return \str_contains($rec['message'], $message);
         }, $level);
     }
 
-    public function hasRecordThatMatches(string $regex, string|int $level): bool
+    public function hasRecordThatMatches(string $regex, string|int|null $level = null): bool
     {
         return $this->hasRecordThatPasses(static function ($rec) use ($regex) {
             return \preg_match($regex, $rec['message']) > 0;
@@ -126,13 +130,13 @@ final class TestLogger extends AbstractLogger
     /**
      * @param callable(array<string, mixed>, int): bool $predicate
      */
-    public function hasRecordThatPasses(callable $predicate, string|int $level): bool
+    public function hasRecordThatPasses(callable $predicate, string|int|null $level = null): bool
     {
-        if (! isset($this->recordsByLevel[$level])) {
+        if (! $this->hasRecords($level)) {
             return false;
         }
 
-        foreach ($this->recordsByLevel[$level] as $i => $rec) {
+        foreach ($level === null ? $this->records : $this->recordsByLevel[$level] as $i => $rec) {
             if (\call_user_func($predicate, $rec, $i)) {
                 return true;
             }
