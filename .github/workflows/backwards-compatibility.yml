@@ -3,6 +3,9 @@ name: "Backwards compatibility"
 on:
     pull_request:
 
+permissions:
+  contents: read
+
 jobs:
     bc-check:
         name: "Backwards compatibility check"
@@ -11,9 +14,16 @@ jobs:
 
         steps:
             - name: "Checkout"
-              uses: "actions/checkout@v2.4.0"
+              uses: "actions/checkout@v4"
               with:
                   fetch-depth: 0
+
+            # User in the container seems to be different than the cloned repo's owner.
+            # Git doesn't like that as the repo will then be unusable by the owner.
+            # We don't care about this here since this is only  used for running one test.
+            # See https://github.com/actions/runner/issues/2033
+            - name: Workaround directory permissions
+              run: mkdir -p /home/runner/work/_temp/_github_home && printf "[safe]\n\tdirectory = /github/workspace" > /home/runner/work/_temp/_github_home/.gitconfig
 
             - name: "BC Check"
               uses: docker://nyholm/roave-bc-check-ga
