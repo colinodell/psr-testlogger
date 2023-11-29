@@ -14,15 +14,15 @@ final class TestLoggerTest extends TestCase
     /**
      * @dataProvider provideLogLevels
      */
-    public function testHasRecords(string $level): void
+    public function testHasRecords(string|null $level): void
     {
-        $magicMethod = 'has' . \ucfirst($level) . 'Records';
+        $magicMethod = 'has' . \ucfirst($level ?? '') . 'Records';
 
         $logger = new TestLogger();
         $this->assertFalse($logger->hasRecords($level));
         $this->assertFalse($logger->$magicMethod());
 
-        $logger->log($level, 'Test');
+        $logger->log($level ?? LogLevel::INFO, 'Test');
         $this->assertTrue($logger->hasRecords($level));
         $this->assertTrue($logger->$magicMethod());
     }
@@ -30,9 +30,9 @@ final class TestLoggerTest extends TestCase
     /**
      * @dataProvider provideLogLevels
      */
-    public function testHasRecord(string $level): void
+    public function testHasRecord(string|null $level): void
     {
-        $magicMethod = 'has' . \ucfirst($level);
+        $magicMethod = 'has' . \ucfirst($level ?? 'Record');
 
         $logger = new TestLogger();
         $this->assertFalse($logger->hasRecord('Test', $level));
@@ -40,7 +40,7 @@ final class TestLoggerTest extends TestCase
         $this->assertFalse($logger->$magicMethod('Test'));
         $this->assertFalse($logger->$magicMethod(['message' => 'Test']));
 
-        $logger->log($level, 'Test');
+        $logger->log($level ?? LogLevel::INFO, 'Test');
 
         $this->assertTrue($logger->hasRecord('Test', $level));
         $this->assertTrue($logger->hasRecord(['message' => 'Test'], $level));
@@ -56,15 +56,15 @@ final class TestLoggerTest extends TestCase
     /**
      * @dataProvider provideLogLevels
      */
-    public function testHasRecordThatContains(string $level): void
+    public function testHasRecordThatContains(string|null $level): void
     {
-        $magicMethod = 'has' . \ucfirst($level) . 'ThatContains';
+        $magicMethod = 'has' . \ucfirst($level ?? 'Record') . 'ThatContains';
 
         $logger = new TestLogger();
         $this->assertFalse($logger->hasRecordThatContains('Test', $level));
         $this->assertFalse($logger->$magicMethod('Test'));
 
-        $logger->log($level, 'This Is A Test');
+        $logger->log($level ?? LogLevel::INFO, 'This Is A Test');
 
         $this->assertTrue($logger->hasRecordThatContains('Test', $level));
         $this->assertTrue($logger->$magicMethod('Test'));
@@ -73,15 +73,15 @@ final class TestLoggerTest extends TestCase
     /**
      * @dataProvider provideLogLevels
      */
-    public function testHasRecordThatMatches(string $level): void
+    public function testHasRecordThatMatches(string|null $level): void
     {
-        $magicMethod = 'has' . \ucfirst($level) . 'ThatMatches';
+        $magicMethod = 'has' . \ucfirst($level ?? 'Record') . 'ThatMatches';
 
         $logger = new TestLogger();
         $this->assertFalse($logger->hasRecordThatMatches('/test/i', $level));
         $this->assertFalse($logger->$magicMethod('/test/i'));
 
-        $logger->log($level, 'This Is A Test');
+        $logger->log($level ?? LogLevel::INFO, 'This Is A Test');
 
         $this->assertTrue($logger->hasRecordThatMatches('/test/i', $level));
         $this->assertTrue($logger->$magicMethod('/test/i'));
@@ -90,9 +90,9 @@ final class TestLoggerTest extends TestCase
     /**
      * @dataProvider provideLogLevels
      */
-    public function testHasRecordThatPasses(string $level): void
+    public function testHasRecordThatPasses(string|null $level): void
     {
-        $magicMethod = 'has' . \ucfirst($level) . 'ThatPasses';
+        $magicMethod = 'has' . \ucfirst($level ?? 'Record') . 'ThatPasses';
 
         $logger = new TestLogger();
         $this->assertFalse($logger->hasRecordThatPasses(static function ($record) {
@@ -102,7 +102,7 @@ final class TestLoggerTest extends TestCase
             return $record['message'] === 'Test';
         }));
 
-        $logger->log($level, 'Test');
+        $logger->log($level ?? LogLevel::INFO, 'Test');
 
         $this->assertTrue($logger->hasRecordThatPasses(static function ($record) {
             return $record['message'] === 'Test';
@@ -211,5 +211,6 @@ final class TestLoggerTest extends TestCase
         yield [LogLevel::CRITICAL];
         yield [LogLevel::ALERT];
         yield [LogLevel::EMERGENCY];
+        yield [null];
     }
 }

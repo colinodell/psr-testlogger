@@ -46,7 +46,7 @@ hasNotice(string|array $record): bool
 hasInfo(string|array $record): bool
 hasDebug(string|array $record): bool
 
-hasRecordThatContains(string $message, string|int $level): bool
+hasRecordThatContains(string $message, string|int|null $level = null): bool
 
 hasEmergencyThatContains(string $message): bool
 hasAlertThatContains(string $message): bool
@@ -57,7 +57,7 @@ hasNoticeThatContains(string $message): bool
 hasInfoThatContains(string $message): bool
 hasDebugThatContains(string $message): bool
 
-hasRecordThatMatches(string $regex, string|int $level): bool
+hasRecordThatMatches(string $regex, string|int|null $level = null): bool
 
 hasEmergencyThatMatches(string $regex): bool
 hasAlertThatMatches(string $regex): bool
@@ -68,7 +68,7 @@ hasNoticeThatMatches(string $regex): bool
 hasInfoThatMatches(string $regex): bool
 hasDebugThatMatches(string $regex): bool
 
-hasRecordThatPasses(callable $predicate, string|int $level): bool
+hasRecordThatPasses(callable $predicate, string|int|null $level = null): bool
 
 hasEmergencyThatPasses(callable $predicate): bool
 hasAlertThatPasses(callable $predicate): bool
