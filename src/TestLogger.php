@@ -105,7 +105,7 @@ final class TestLogger extends AbstractLogger
         }
 
         return $this->hasRecordThatPasses(static function (array $rec) use ($record) {
-            if ($rec['message'] !== $record['message']) {
+            if ((string) $rec['message'] !== (string) $record['message']) {
                 return false;
             }
 
@@ -116,14 +116,14 @@ final class TestLogger extends AbstractLogger
     public function hasRecordThatContains(string $message, string|int|null $level = null): bool
     {
         return $this->hasRecordThatPasses(static function (array $rec) use ($message) {
-            return \str_contains($rec['message'], $message);
+            return \str_contains((string) $rec['message'], $message);
         }, $level);
     }
 
     public function hasRecordThatMatches(string $regex, string|int|null $level = null): bool
     {
         return $this->hasRecordThatPasses(static function ($rec) use ($regex) {
-            return \preg_match($regex, $rec['message']) > 0;
+            return \preg_match($regex, (string) $rec['message']) > 0;
         }, $level);
     }
 
