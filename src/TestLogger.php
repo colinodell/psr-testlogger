@@ -68,6 +68,7 @@ final class TestLogger extends AbstractLogger
     /**
      * {@inheritDoc}
      *
+     * @param mixed                   $message
      * @param array<array-key, mixed> $context
      */
     public function log($level, $message, array $context = []): void
