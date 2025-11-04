@@ -3,7 +3,7 @@
 [![Latest Version](https://img.shields.io/packagist/v/colinodell/psr-testlogger.svg?style=flat-square)](https://packagist.org/packages/colinodell/psr-testlogger)
 [![Total Downloads](https://img.shields.io/packagist/dt/colinodell/psr-testlogger.svg?style=flat-square)](https://packagist.org/packages/colinodell/psr-testlogger)
 [![Software License](https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Build Status](https://img.shields.io/github/workflow/status/colinodell/psr-testlogger/Tests/main.svg?style=flat-square)](https://github.com/colinodell/psr-testlogger/actions?query=workflow%3ATests+branch%3Amain)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/colinodell/psr-testlogger/tests.yml?style=flat-square)](https://github.com/colinodell/psr-testlogger/actions?query=workflow%3ATests+branch%3Amain)
 [![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/colinodell/psr-testlogger.svg?style=flat-square)](https://scrutinizer-ci.com/g/colinodell/psr-testlogger/code-structure)
 [![Quality Score](https://img.shields.io/scrutinizer/g/colinodell/psr-testlogger.svg?style=flat-square)](https://scrutinizer-ci.com/g/colinodell/psr-testlogger)
 [![Psalm Type Coverage](https://shepherd.dev/github/colinodell/psr-testlogger/coverage.svg)](https://shepherd.dev/github/colinodell/psr-testlogger)
